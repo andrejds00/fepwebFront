@@ -1,0 +1,224 @@
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+<div class="flex flex-row gap-2 action-find">
+    <div class="flex flex-column gap-2">
+        <label htmlFor="codigo" style="color:white">Código</label>
+        <input pInputText id="codigo" aria-describedby="username-help" [(ngModel)]="codigo" />
+    </div>
+    <div class="flex flex-column gap-2">
+        <label htmlFor="cpf" style="color:white">CPF</label>
+        <input pInputText id="cpf" aria-describedby="username-help" [(ngModel)]="cpf" />
+    </div>
+    <div class="flex flex-column gap-2">
+        <label htmlFor="nome" style="color:white">Nome</label>
+        <input pInputText id="nome" style="width: 500px" aria-describedby="username-help" [(ngModel)]="nome" />
+    </div>
+    <div class="flex flex-column gap-2">
+        <label style="color:rgb(69, 79, 80);">.</label>
+        <p-button class="button-filter" label="Buscar" icon="pi pi-filter" (onClick)="read()"></p-button>
+    </div>
+    <div class="flex flex-column gap-2">
+        <label style="color:rgb(69, 79, 80);">.</label>
+        <p-button label="Cadastrar" icon="pi pi-plus-circle" (onClick)="navigateToClientCreate()"></p-button>
+    </div>
+</div>
+
+<div class="card">
+    <p-table #dt1 [value]="participantes" dataKey="id" [loading]="loading" [paginator]="true" [rows]="10"
+        [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+        currentPageReportTemplate="Encontrado {first} a {last} em um total de {totalRecords} itens"
+        [globalFilterFields]="['cpf', 'nome', 'rg']" selectionMode="single" [(selection)]="selectedClient"
+        [rowsPerPageOptions]="[10, 25, 50]">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <button pButton label="Limpar Filtro" class="p-button-outlined" icon="pi pi-filter-slash"
+                    (click)="clear(dt1)"></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="id" style="width:3%">Código<p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="cpfCnpj" style="width:25%">Cpf<p-sortIcon field="cpfCnpj"></p-sortIcon></th>
+                <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+                <th style="width:10%">Telefone </th>
+                <th style="width:10%"></th>
+            </tr>
+            <tr>
+                <th>
+                    <p-columnFilter type="text" field="id"></p-columnFilter>
+
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="cpfCnpj"></p-columnFilter>
+
+                </th>
+                <th>
+                    <p-columnFilter type="text" field="nome"></p-columnFilter>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data>
+            <tr [pSelectableRow]="data">
+                <td>{{ data.id }}</td>
+                <td>{{ data.cpfCnpj }}</td>
+                <td>{{ data.nome }}</td>
+                <td>{{ data.telefone1 }}</td>
+                <td>
+                    <button style="margin-right:5px" type="button" pButton pRipple icon="pi pi-folder-open"
+                        (click)="showDialog(data)"></button>
+                    <p-button icon="pi pi-trash" styleClass="p-button-danger" (click)="selectClient(data)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="paginatorleft">
+        </ng-template>
+        <ng-template pTemplate="paginatorright">
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7">Nenhum registro encontrado</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Dados Cadastrados" [(visible)]="visibleDialog" [modal]="true" [style]="{ width: '50vw' }"
+    [draggable]="false" [resizable]="false">
+    <p-accordion [activeIndex]="0">
+        <p-accordionTab header="Principal">
+            <div class="form-container">
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Código </label>
+                        <span>{{participante.id}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Cód. Externo </label>
+                        <span>{{participante.codExterno}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Cpf </label>
+                        <span>{{participante.cpfCnpj}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 3;">
+                    <span class="field p-fluid mt-4">
+                        <label>Nome </label>
+                        <span>{{participante.nome}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Documento </label>
+                        <span>{{participante.documento}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 2;">
+                    <span class="field p-fluid mt-4">
+                        <label>Email </label>
+                        <span>{{participante.email}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Telefone 1 </label>
+                        <span>{{participante.telefone1}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Telefone 2 </label>
+                        <span>{{participante.telefone2}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Estado Civil</label>
+                        <span>{{participante.estadoCivil}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Sexo</label>
+                        <span>{{participante.sexo}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Data Nascimento</label>
+                        <span>{{participante.dataNascimento | date:'dd/MM/yyyy'}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Data Cadastro</label>
+                        <span>{{participante.dataCadastro | date:'dd/MM/yyyy'}} </span>
+                    </span>
+                </div>
+
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Endereço">
+            <div class="form-container">
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Cep </label>
+                        <span>{{participante.endereco?.cep}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 5;">
+                    <span class="field p-fluid mt-4">
+                        <label>Logradouro</label>
+                        <span>{{participante.endereco?.logradouro}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>Número </label>
+                        <span>{{participante.endereco?.numero}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 2;">
+                    <span class="field p-fluid mt-4">
+                        <label>Bairo </label>
+                        <span>{{participante.endereco?.bairro}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 2;">
+                    <span class="field p-fluid mt-4">
+                        <label>Cidade </label>
+                        <span>{{participante.endereco?.cidade}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 1;">
+                    <span class="field p-fluid mt-4">
+                        <label>UF </label>
+                        <span>{{participante.endereco?.uf}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 6;">
+                    <span class="field p-fluid mt-4">
+                        <label>Complemento</label>
+                        <span>{{participante.endereco?.complemento}} </span>
+                    </span>
+                </div>
+                <div class="form-field" style="grid-column: span 6;">
+                    <span class="field p-fluid mt-4">
+                        <label>Ponto de Referencia </label>
+                        <span>{{participante.endereco?.pontoReferencia}} </span>
+                    </span>
+                </div>
+
+            </div>
+        </p-accordionTab>
+    </p-accordion>
+
+
+
+</p-dialog>

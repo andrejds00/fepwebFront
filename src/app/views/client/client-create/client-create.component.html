@@ -1,0 +1,170 @@
+<p-toast></p-toast>
+<strong class="title">Cadastro Participante</strong>
+
+<p-tabView>
+    <p-tabPanel header="Principal">
+        <div class="form-container">
+
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label>Código Externo</label>
+                    <input pInputText class="input-upper" [(ngModel)]="participante.codExterno" />
+                </span>
+            </div>
+
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label>Cpf <span class="red">*</span></label>
+                    <input pInputText class="input-upper {{!validateCpf ? 'ng-invalid ng-dirty' : ''}}"
+                        [(ngModel)]="participante.cpfCnpj" />
+                    <small *ngIf="!validateCpf" id="username-help" class="p-error">Campo obrigatório</small>
+                </span>
+            </div>
+
+            <div class="form-field" style="grid-column: span 4;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="nome">Nome <span class="red">*</span></label>
+                    <input pInputText class="input-upper {{!validateName ? 'ng-invalid ng-dirty' : ''}}" id="nome"
+                        [(ngModel)]="participante.nome" />
+                    <small *ngIf="!validateName" id="username-help" class="p-error">Campo obrigatório</small>
+                </span>
+            </div>
+
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label>Documento</label>
+                    <input pInputText class="input-upper" [(ngModel)]="participante.documento" />
+                </span>
+            </div>
+
+            <div class="form-field" style="grid-column: span 2;">
+                <span class="field p-fluid mt-4">
+                    <label>Email</label>
+                    <input pInputText [(ngModel)]="participante.email" />
+                </span>
+            </div>
+
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label>Telefone 1 </label>
+                    <p-inputMask [style]="{'width':'100%', 'height': '33px', 'align-items':'center'}"
+                        mask="(99) ?999999999" [(ngModel)]="participante.telefone1" placeholder="(99) 999999999"
+                        class="input-upper"></p-inputMask>
+
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="telefone2">Telefone 2</label>
+                    <p-inputMask [style]="{'width':'100%', 'height': '33px', 'align-items':'center'}"
+                        mask="(99) ?999999999" [(ngModel)]="participante.telefone2"
+                        placeholder="(99) 999999999"></p-inputMask>
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="nome">Sexo</label>
+                    <p-dropdown [style]="{'width':'100%', 'height': '33px', 'align-items':'center'}"
+                        [options]="tiposSexo" [(ngModel)]="selectedTipoSexo" optionLabel="hint"></p-dropdown>
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="flex flex-column gap-2">
+                    <label for="rememberme1" class="text-900">Data Nascimento</label>
+                    <p-calendar [(ngModel)]="participante.dataNascimento" [showIcon]="true"
+                        [style]="{'width':'100%','height': '33px'}" dateFormat="dd/mm/yy"></p-calendar>
+                </span>
+            </div>
+
+
+
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Endereço">
+
+        <div class="form-container">
+            <div class="form-field" style="grid-column: span 1;">
+                <label htmlFor="cep">Cep </label>
+                <span class="p-inputgroup field p-fluid mt-2">
+                    <input pInputText id="cep" [(ngModel)]="participante.endereco!.cep" style="height: 30px" />
+                    <button type="button" pButton icon="pi pi-refresh" style="height: 30px" (click)="getCep()"></button>
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 4;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="logradouro">Logradouro </label>
+                    <input pInputText class="input-upper" id="logradouro"
+                        [(ngModel)]="participante.endereco!.logradouro" />
+
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="numero">Número</label>
+                    <input pInputText class="input-upper" id="numero" [(ngModel)]="participante.endereco!.numero" />
+                </span>
+            </div>
+
+            <div class="form-field" style="grid-column: span 2;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="bairro">Bairro </label>
+                    <input pInputText class="input-upper" id="bairro" [(ngModel)]="participante.endereco!.bairro" />
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="uf">UF </label>
+                    <input pInputText class="input-upper" id="uf" [(ngModel)]="participante.endereco!.uf" />
+
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 2;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="cidade">Cidade </label>
+                    <input pInputText class="input-upper" id="cidade" [(ngModel)]="participante.endereco!.cidade" />
+
+                </span>
+            </div>
+
+            <div class="form-field" style="grid-column: span 3;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="complemento">Complemento</label>
+                    <input pInputText class="input-upper" id="complemento"
+                        [(ngModel)]="participante.endereco!.complemento" />
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 3;">
+                <span class="field p-fluid mt-4">
+                    <label htmlFor="pontoReferencia">Ponto de Referencia</label>
+                    <input pInputText class="input-upper" id="pontoReferencia"
+                        [(ngModel)]="participante.endereco!.pontoReferencia" />
+                </span>
+            </div>
+        </div>
+
+    </p-tabPanel>
+    <p-tabPanel header="Complemento">
+
+        <div class="form-container">
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="flex flex-column gap-2">
+                    <label class="text-900">Ativa</label>
+                    <p-checkbox [binary]="true" styleClass="mr-2" [(ngModel)]="participante.ativa"></p-checkbox>
+                </span>
+            </div>
+            <div class="form-field" style="grid-column: span 1;">
+                <span class="flex flex-column gap-2">
+                    <label for="rememberme1" class="text-900">Data Cadastro</label>
+                    <p-calendar [(ngModel)]="participante.dataCadastro" [showIcon]="true"
+                        [style]="{'width':'100%','height': '33px'}" dateFormat="dd/mm/yy"></p-calendar>
+                </span>
+            </div>
+            <div style="min-height: 200px;"></div>
+        </div>
+
+    </p-tabPanel>
+</p-tabView>
+
+<p-button class="right-align" label="Cadastrar" icon="pi pi-save" (onClick)="createParticipante()"></p-button>
+<p-button class="right-align" label="Sair" styleClass="p-button-secondary" icon="pi pi-sign-out"
+    (onClick)="navigateToClientList()"></p-button>
